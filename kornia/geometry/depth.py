@@ -109,7 +109,10 @@ def warp_frame_depth(
         depth_dst: torch.Tensor,
         src_trans_dst: torch.Tensor,
         camera_matrix: torch.Tensor,
-        normalize_points: bool = False) -> torch.Tensor:
+        normalize_points: bool = False,
+        mode: str = 'bilinear',
+        padding_mode: str = 'zeros',
+        align_corners: bool = True) -> torch.Tensor:
     """Warp a tensor from a source to destination frame by the depth in the destination.
 
     Compute 3d points from the depth, transform them using given transformation, then project the point cloud to an
@@ -173,4 +176,4 @@ def warp_frame_depth(
     points_2d_src_norm: torch.Tensor = normalize_pixel_coordinates(
         points_2d_src, height, width)  # BxHxWx2
 
-    return F.grid_sample(image_src, points_2d_src_norm, align_corners=True)  # type: ignore
+    return F.grid_sample(image_src, points_2d_src_norm, mode=mode, padding_mode=padding_mode, align_corners=align_corners)  # type: ignore
